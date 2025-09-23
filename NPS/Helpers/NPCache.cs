@@ -35,17 +35,20 @@ namespace NPS.Helpers
 
         public static void Load()
         {
-            try
+            if (File.Exists(Path))
             {
-                using var stream = File.OpenRead(Path);
-                var formatter = new BinaryFormatter();
-                _i = (NPCache) formatter.Deserialize(stream);
-                _i.renasceneCache ??= new List<Renascene>();
-                return;
-            }
-            catch (SerializationException)
-            {
-                // Nada.
+                try
+                {
+                    using var stream = File.OpenRead(Path);
+                    var formatter = new BinaryFormatter();
+                    _i = (NPCache)formatter.Deserialize(stream);
+                    _i.renasceneCache ??= new List<Renascene>();
+                    return;
+                }
+                catch (SerializationException)
+                {
+                    // Nada.
+                }
             }
 
             _i = new NPCache(System.DateTime.MinValue);
