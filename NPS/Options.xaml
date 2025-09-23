@@ -1,0 +1,129 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:nps="clr-namespace:NPS"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        x:Class="NPS.Options"
+        Icon="/Assets/Images/8-512.ico"
+        Title="Options"
+        Padding="4"
+        Width="800"
+        Height="400"
+        WindowStartupLocation="CenterOwner">
+
+    <TabControl TabStripPlacement="Left">
+        <TabItem>
+            <TabItem.Header>
+                <TextBlock Text="Downloads" />
+            </TabItem.Header>
+
+            <Grid ColumnDefinitions="Auto,Auto,*" RowDefinitions="Auto,Auto,Auto,Auto,Auto">
+                <Control MinWidth="4" Grid.Column="1" />
+
+                <TextBlock Grid.Row="0" VerticalAlignment="Center" Text="Download and unpack dir:" />
+                <nps:BrowseableUriEntry Grid.Row="0" Grid.Column="2" Name="textDownload" IsDirEntry="True" />
+
+                <TextBlock Grid.Row="1" VerticalAlignment="Center" Text="Any pkg dec tool:" />
+                <nps:BrowseableUriEntry Grid.Row="1" Grid.Column="2" Name="textPKGPath" />
+
+                <TextBlock Grid.Row="2" VerticalAlignment="Center" Text="Pkg dec params:" />
+                <TextBox Grid.Row="2" Grid.Column="2" Name="textParams" MinWidth="300" HorizontalAlignment="Left" />
+
+                <TextBlock Grid.Row="3" VerticalAlignment="Center" Text="Delete after unpack:" />
+                <CheckBox Grid.Row="3" Grid.Column="2" Name="deleteAfterUnpack" Margin="0, 1, 0, 0" />
+
+                <TextBlock Grid.Row="4" VerticalAlignment="Center" Text="Simultaneous downloads:" />
+                <NumericUpDown Grid.Row="4" Grid.Column="2" Name="simultaneousDl" HorizontalAlignment="Left" />
+            </Grid>
+        </TabItem>
+        <TabItem>
+            <TabItem.Header>
+                <TextBlock Text="Database" />
+            </TabItem.Header>
+
+            <StackPanel>
+                <!-- Game URIs -->
+                <TextBlock Text="Games" />
+                <StackPanel Margin="4">
+                    <nps:BrowseableUriEntry Label="PSV tsv" Name="tb_psvuri" />
+                    <nps:BrowseableUriEntry Label="PSM tsv" Name="tb_psmuri" />
+                    <nps:BrowseableUriEntry Label="PSX tsv" Name="tb_psxuri" />
+                    <nps:BrowseableUriEntry Label="PSP tsv" Name="tb_pspuri" />
+                    <nps:BrowseableUriEntry Label="PS3 tsv" Name="tb_ps3uri" />
+                    <nps:BrowseableUriEntry Label="PS4 tsv" Name="tb_ps4uri" IsVisible="False" />
+                </StackPanel>
+
+                <!-- Avatar URIs -->
+                <TextBlock Text="Avatars" IsVisible="False" />
+                <StackPanel Margin="4">
+                    <nps:BrowseableUriEntry Label="Avatar tsv" Name="tb_ps3avataruri" IsVisible="False" />
+                </StackPanel>
+
+                <!-- DLC URIs -->
+                <TextBlock Text="DLCs" />
+                <StackPanel Margin="4">
+                    <nps:BrowseableUriEntry Label="PSV tsv" Name="tb_psvdlcuri" />
+                    <nps:BrowseableUriEntry Label="PSP tsv" Name="tb_pspdlcuri" />
+                    <nps:BrowseableUriEntry Label="PS3 tsv" Name="tb_ps3dlcuri" />
+                    <nps:BrowseableUriEntry Label="PS4 tsv" Name="tb_ps4dlcuri" IsVisible="False" />
+                </StackPanel>
+
+                <!-- Theme URIs -->
+                <TextBlock Text="Themes" />
+                <StackPanel Margin="4">
+                    <nps:BrowseableUriEntry Label="PSV tsv" Name="tb_psvthmuri" />
+                    <nps:BrowseableUriEntry Label="PSP tsv" Name="tb_pspthmuri" IsVisible="False" />
+                    <nps:BrowseableUriEntry Label="PS3 tsv" Name="tb_ps3thmuri" IsVisible="False" />
+                    <nps:BrowseableUriEntry Label="PS4 tsv" Name="tb_ps4thmuri" IsVisible="False" />
+                </StackPanel>
+
+                <!-- Update URIs -->
+                <TextBlock Text="Updates" IsVisible="False" />
+                <StackPanel Margin="4">
+                    <nps:BrowseableUriEntry Label="PSV tsv" Name="tb_psvupduri" IsVisible="False" />
+                    <nps:BrowseableUriEntry Label="PS4 tsv" Name="tb_ps4upduri" IsVisible="False" />
+                </StackPanel>
+
+                <!-- CompPack -->
+                <Grid ColumnDefinitions="Auto, Auto *" RowDefinitions="*,*">
+                    <TextBlock Grid.Column="0" Grid.Row="0" VerticalAlignment="Center" Text="CompPack URL:" />
+                    <TextBox Grid.Column="2" Grid.Row="0" Name="tb_compPack" />
+                    <Control MinWidth="4" Grid.Column="1" />
+
+                    <TextBlock Grid.Column="0" Grid.Row="1" VerticalAlignment="Center" Text="CompPack patch URL:" />
+                    <TextBox Grid.Column="2" Grid.Row="1" Name="tb_compackPatch" />
+                </Grid>
+            </StackPanel>
+        </TabItem>
+        <TabItem>
+            <TabItem.Header>
+                <TextBlock Text="Proxy" />
+            </TabItem.Header>
+
+            <StackPanel Margin="4">
+                <StackPanel Orientation="Horizontal">
+                    <CheckBox Name="chkbx_proxy" Content="Use proxy server" />
+                </StackPanel>
+                <Grid ColumnDefinitions="Auto, *" RowDefinitions="*,*" Margin="4">
+                    <TextBlock Grid.Column="0" Grid.Row="0" VerticalAlignment="Center" Text="Address:   " />
+                    <TextBox Grid.Column="1" Grid.Row="0" Name="tb_proxyServer" MinWidth="300"
+                             HorizontalAlignment="Left" />
+
+                    <TextBlock Grid.Column="0" Grid.Row="1" VerticalAlignment="Center" Text="Port:" />
+                    <TextBox Grid.Column="1" Grid.Row="1" Name="tb_proxyPort" MinWidth="50" HorizontalAlignment="Left" />
+                </Grid>
+            </StackPanel>
+        </TabItem>
+        <TabItem>
+            <TabItem.Header>
+                <TextBlock Text="Cache" />
+            </TabItem.Header>
+
+            <StackPanel VerticalAlignment="Top">
+                <TextBlock VerticalAlignment="Center" Name="lblCacheDate" />
+                <Button Name="btnSyncNow" Content="Sync now" HorizontalAlignment="Left" />
+            </StackPanel>
+        </TabItem>
+    </TabControl>
+</Window>
