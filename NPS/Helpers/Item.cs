@@ -3,18 +3,25 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text.RegularExpressions;
 using JetBrains.Annotations;
+using ProtoBuf;
 
 namespace NPS
 {
-    [Serializable]
+    [ProtoContract]
     public class Item : IEquatable<Item>
     {
+        [ProtoMember(1)]
         public string TitleId;
+        [ProtoMember(2)]
         public string Region;
+        [ProtoMember(3)]
         public string TitleName;
+        [ProtoMember(4)]
         public string zRif;
+        [ProtoMember(5)]
         public string pkg;
-
+        
+        [ProtoMember(6)]
         public DateTime lastModifyDate = DateTime.MinValue;
 
         public int DLCs => DlcItm?.Count ?? 0;
@@ -22,20 +29,33 @@ namespace NPS
 
         public string extension => ItsCompPack ? ".ppk" : ".pkg";
 
+        [ProtoMember(7)]
         public bool ItsPsx = false;
+        [ProtoMember(8)]
         public bool ItsPsp = false;
+        [ProtoMember(9)]
         public bool ItsPS3 = false;
+        [ProtoMember(10)]
         public bool ItsPS4 = false;
 
+        [ProtoMember(11)]
         public bool ItsCompPack = false;
+        [ProtoMember(12)]
         public bool IsAvatar = false;
+        [ProtoMember(13)]
         public bool IsDLC = false;
+        [ProtoMember(14)]
         public bool IsTheme = false;
+        [ProtoMember(15)]
         public bool IsUpdate = false;
 
+        [ProtoMember(16)]
         public string ParentGameTitle = string.Empty;
+        [ProtoMember(17)]
         public string ContentId = null;
+        [ProtoMember(18)]
         public string offset = "";
+        [ProtoMember(19)]
         public string contentType = "";
 
         public string DownloadFileName

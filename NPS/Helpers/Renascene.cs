@@ -1,17 +1,36 @@
 ﻿using System;
-using System.Drawing;
-using System.IO;
 using System.Net;
-using Newtonsoft.Json;
+using System.Text.Json;
+using ProtoBuf;
 
 namespace NPS.Helpers
 {
-    [System.Serializable]
+    [ProtoContract]
     public class Renascene
     {
-        public string imgUrl, genre, language, publish, developer, size, url;
+        [ProtoMember(1)]
+        public string imgUrl;
+        [ProtoMember(2)]
+        public string genre;
+        [ProtoMember(3)]
+        public string language;
+        [ProtoMember(4)]
+        public string publish;
+        [ProtoMember(5)]
+        public string developer;
+        [ProtoMember(6)]
+        public string size;
+        [ProtoMember(7)]
+        public string url;
+
         //public Image image;
+        [ProtoMember(8)]
         public Item itm;
+
+        // Parameterless constructor is needed for protobuf-net deserialization.
+        public Renascene()
+        {
+        }
 
         public Renascene(Item itm)
         {
@@ -39,10 +58,14 @@ namespace NPS.Helpers
 
                 try
                 {
-                    content = wc.DownloadString(new Uri("https://store.playstation.com/chihiro-api/viewfinder/" + region + "/19/" + itm.ContentId));
+                    content = wc.DownloadString(new Uri("https://store.playstation.com/chihiro-api/viewfinder/" +
+                                                        region + "/19/" + itm.ContentId));
 
-                    var contentJson = JsonConvert.DeserializeObject<PSNJson>(content);
-                    this.imgUrl = contentJson.cover;
+                    var options = new JsonSerializerOptions() { PropertyNameCaseInsensitive = true };
+                    var contentJson = JsonSerializer.Deserialize<PSNJson>(content, options);
+                  
+                    this.imgUrl = contentJson?.cover;
+                    
                 }
                 catch
                 {

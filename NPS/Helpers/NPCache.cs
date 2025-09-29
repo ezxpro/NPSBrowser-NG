@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Reflection.Metadata;
 using Newtonsoft.Json;
+using ProtoBuf;
 
 namespace NPS.Helpers
 {
-    [Serializable]
+    [ProtoContract]
     public class NPCache
     {
         private const string Path = "nps.cache";
@@ -24,8 +26,11 @@ namespace NPS.Helpers
             }
         }
 
+        [ProtoMember(1)]
         public DateTime UpdateDate { get; set; }
+        [ProtoMember(2)]
         public List<Item> localDatabase = new List<Item>();
+        [ProtoMember(3)]
         public List<Renascene> renasceneCache = new List<Renascene>();
 
         public bool IsCacheValid
@@ -50,15 +55,15 @@ namespace NPS.Helpers
             {
                 try
                 {
-                    var json = File.ReadAllText(Path);
-                    _instance = JsonConvert.DeserializeObject<NPCache>(json)
-                                ?? new NPCache(DateTime.MinValue);
-
+                    using (var file = File.OpenRead(Path))
+                    {
+                        _instance = Serializer.Deserialize<NPCache>(file);
+                    }
                     _instance.renasceneCache ??= new List<Renascene>();
                     _instance.localDatabase ??= new List<Item>();
                     return;
                 }
-                catch (JsonException)
+                catch (ProtoException)
                 {
                     // bad cache → drop it
                 }
@@ -80,8 +85,10 @@ namespace NPS.Helpers
 
         public void Save()
         {
-            var json = JsonConvert.SerializeObject(this, Formatting.None);
-            File.WriteAllText(Path, json);
+            using (var file = File.Create(Path))
+            {
+                Serializer.Serialize(file, this);
+            }
         }
 
         public NPCache(DateTime creationDate)
