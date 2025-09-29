@@ -18,13 +18,11 @@ using Avalonia.Markup.Xaml;
 using Avalonia.Media;
 using Avalonia.Threading;
 using Avalonia.VisualTree;
-//using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using NPS.Helpers;
 using NPS.Helpers.CustomComponents;
 using ReactiveUI;
-using System.Text.Json;
-
+using System.Text.Json; 
+using System.Text.Json.Nodes;
 
 namespace NPS
 {
@@ -326,13 +324,6 @@ namespace NPS
                 client.DefaultRequestHeaders.Add("user-agent", "MyPersonalApp");
                 var content = await client.GetStringAsync("https://nopaystation.com/vita/npsReleases/version.json");
 
-                // 2. Change this line of code
-                // BEFORE (Newtonsoft.Json)
-                // releases = JsonConvert.DeserializeObject<Release[]>(content);
-        
-                // AFTER (System.Text.Json)
-                // Note: We add options to make property name matching case-insensitive,
-                // which is a common requirement when dealing with web APIs.
                 var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
                 releases = JsonSerializer.Deserialize<Release[]>(content, options);
 
@@ -654,10 +645,11 @@ namespace NPS
                     p4client.Headers.Add("user-agent", "MyPersonalApp :)");
                     string json = p4client.DownloadString(a.pkg);
 
-                    var fields = JObject.Parse(json);
-                    var pieces = fields["pieces"] as JArray;
-                    foreach (JObject piece in pieces)
+                    var fields = JsonNode.Parse(json).AsObject();
+                    var pieces = fields["pieces"].AsArray();
+                    foreach (var pieceNode in pieces)
                     {
+                        var piece = pieceNode.AsObject();
                         Item inneritm = new Item()
                         {
                             TitleId = a.TitleId,
@@ -1307,51 +1299,6 @@ namespace NPS
             checkForPatchesToolStripMenuItem = this.FindControl<MenuItem>("checkForPatchesToolStripMenuItem");
             toggleDownloadedToolStripMenuItem = this.FindControl<MenuItem>("toggleDownloadedToolStripMenuItem");
             toolStripMenuItem1 = this.FindControl<MenuItem>("toolStripMenuItem1");
-
-            this.WhenAnyValue(x => x.txtSearch.Text)
-                .Subscribe(_ => txtSearch_TextChanged());
-
-            this.WhenAnyValue(x => x.rbnGames.IsChecked)
-                .Subscribe(_ => rbnGames_CheckedChanged());
-
-            this.WhenAnyValue(x => x.rbnAvatars.IsChecked)
-                .Subscribe(_ => rbnAvatars_CheckedChanged());
-
-            this.WhenAnyValue(x => x.rbnThemes.IsChecked)
-                .Subscribe(_ => rbnThemes_CheckedChanged());
-
-            this.WhenAnyValue(x => x.rbnDLC.IsChecked)
-                .Subscribe(_ => rbnDLC_CheckedChanged());
-
-            this.WhenAnyValue(x => x.rbnUpdates.IsChecked)
-                .Subscribe(_ => rbnUpdates_CheckedChanged());
-
-            this.WhenAnyValue(x => x.rbnDownloaded.IsChecked)
-                .Subscribe(_ => rbnDownloaded_CheckedChanged());
-
-            this.WhenAnyValue(x => x.rbnAll.IsChecked)
-                .Subscribe(_ => rbnAll_CheckedChanged());
-
-            this.WhenAnyValue(x => x.rbnUndownloaded.IsChecked)
-                .Subscribe(_ => rbnUndownloaded_CheckedChanged());
-
-            btnDownload.Command = ReactiveCommand.Create(btnDownload_Click);
-
-            btnResume.Command = ReactiveCommand.Create(resumeToolStripMenuItem_Click);
-            btnPause.Command = ReactiveCommand.Create(pauseToolStripMenuItem_Click);
-            btnCancel.Command = ReactiveCommand.Create(cancelToolStripMenuItem_Click);
-            btnClear.Command = ReactiveCommand.Create(clearCompletedToolStripMenuItem_Click);
-            btnOpenFolder.Command = ReactiveCommand.Create(button5_Click);
-            btnResumeAll.Command = ReactiveCommand.Create(ResumeAllBtnClick);
-            btnPauseAll.Command = ReactiveCommand.Create(PauseAllBtnClick);
-
-            downloadAndUnpackToolStripMenuItem.Command = ReactiveCommand.Create(btnDownload_Click);
-            showTitleDlcToolStripMenuItem.Command = ReactiveCommand.Create(showTitleDlcToolStripMenuItem_Click);
-            downloadAllDlcsToolStripMenuItem.Command = ReactiveCommand.Create(downloadAllDlcsToolStripMenuItem_Click);
-            downloadAllToolStripMenuItem.Command = ReactiveCommand.Create(downloadAllToolStripMenuItem_Click);
-            checkForPatchesToolStripMenuItem.Command = ReactiveCommand.Create(checkForPatchesToolStripMenuItem_Click);
-            toggleDownloadedToolStripMenuItem.Command = ReactiveCommand.Create(toggleDownloadedToolStripMenuItem_Click);
-            toolStripMenuItem1.Command = ReactiveCommand.Create(toolStripMenuItem1_Click);
 
             OptionsMenuItem.Command = ReactiveCommand.Create(optionsToolStripMenuItem_Click);
             SyncMenuItem.Command = ReactiveCommand.Create(Sync);

@@ -5,9 +5,9 @@ using System.Threading.Tasks;
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
 using Avalonia.Media.Imaging;
-using Newtonsoft.Json;
 using ReactiveUI;
 using Image = Avalonia.Controls.Image;
+using System.Text.Json; // Added for System.Text.Json
 
 namespace NPS
 {
@@ -109,7 +109,7 @@ namespace NPS
                 resp.EnsureSuccessStatusCode();
                 var content = await resp.Content.ReadAsStringAsync();
 
-                var contentJson = JsonConvert.DeserializeObject<PSNJson>(content);
+                var contentJson = System.Text.Json.JsonSerializer.Deserialize<PSNJson>(content);
 
                 LoadImages(wc, contentJson, cts);
 
@@ -174,7 +174,7 @@ namespace NPS
             }
         }
 
-/*        private void pictureClicked(object sender, EventArgs e)
+/* private void pictureClicked(object sender, EventArgs e)
         {
             var a = (sender as PictureBox);
             if (a.Tag == null)
