@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Net;
+using Newtonsoft.Json;
 using System.Runtime.Serialization.Formatters.Binary;
 
 [Serializable]
@@ -65,9 +66,15 @@ public class Settings
     {
         if (File.Exists(CONFIG_PATH))
         {
-            using var stream = File.OpenRead(CONFIG_PATH);
-            var formatter = new BinaryFormatter();
-            return (Settings) formatter.Deserialize(stream);
+            try
+            {
+                var json = File.ReadAllText(CONFIG_PATH);
+                return JsonConvert.DeserializeObject<Settings>(json) ?? new Settings();
+            }
+            catch (JsonException)
+            {
+                // fall back to defaults if corrupted
+            }
         }
 
         return new Settings();
@@ -75,8 +82,7 @@ public class Settings
 
     public void Save()
     {
-        using var stream = File.Create(CONFIG_PATH);
-        var formatter = new BinaryFormatter();
-        formatter.Serialize(stream, this);
+        var json = JsonConvert.SerializeObject(this, Formatting.Indented);
+        File.WriteAllText(CONFIG_PATH, json);
     }
 }

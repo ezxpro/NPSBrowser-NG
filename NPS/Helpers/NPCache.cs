@@ -1,15 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Runtime.Serialization;
-using System.Runtime.Serialization.Formatters.Binary;
+using Newtonsoft.Json;
 
 namespace NPS.Helpers
 {
-    [System.Serializable]
+    [Serializable]
     public class NPCache
     {
         private const string Path = "nps.cache";
+        private static NPCache _instance;
+        private bool _cacheInvalid;
 
         public static NPCache Instance
         {
@@ -19,34 +20,23 @@ namespace NPS.Helpers
                 {
                     Load();
                 }
-
                 return _instance;
             }
         }
 
-        private bool _cacheInvalid;
+        public DateTime UpdateDate { get; set; }
+        public List<Item> localDatabase = new List<Item>();
+        public List<Renascene> renasceneCache = new List<Renascene>();
 
         public bool IsCacheValid
         {
             get
             {
-                if (_cacheInvalid)
-                {
-                    return false;
-                }
-
-                TimeSpan cacheAge = System.DateTime.Now - UpdateDate;
-                bool isValid = cacheAge < TimeSpan.FromDays(4); // Valid if not older than 4 days
-                
-                return isValid;
+                if (_cacheInvalid) return false;
+                TimeSpan cacheAge = DateTime.Now - UpdateDate;
+                return cacheAge < TimeSpan.FromDays(4);
             }
         }
-
-        private static NPCache _instance;
-
-        public DateTime UpdateDate { get; private set; }
-        public List<Item> localDatabase = new List<Item>();
-        public List<Renascene> renasceneCache = new List<Renascene>();
 
         public static void Load()
         {
@@ -54,19 +44,21 @@ namespace NPS.Helpers
             {
                 try
                 {
-                    using var stream = File.OpenRead(Path);
-                    var formatter = new BinaryFormatter();
-                    _instance = (NPCache)formatter.Deserialize(stream);
+                    var json = File.ReadAllText(Path);
+                    _instance = JsonConvert.DeserializeObject<NPCache>(json)
+                                ?? new NPCache(DateTime.MinValue);
+
                     _instance.renasceneCache ??= new List<Renascene>();
+                    _instance.localDatabase ??= new List<Item>();
                     return;
                 }
-                catch (SerializationException)
+                catch (JsonException)
                 {
-                    // Nada.
+                    // bad cache → drop it
                 }
             }
 
-            _instance = new NPCache(System.DateTime.MinValue);
+            _instance = new NPCache(DateTime.MinValue);
         }
 
         public void InvalidateCache()
@@ -74,7 +66,7 @@ namespace NPS.Helpers
             _cacheInvalid = true;
         }
 
-        public void Save(System.DateTime updateDate)
+        public void Save(DateTime updateDate)
         {
             UpdateDate = updateDate;
             Save();
@@ -82,12 +74,11 @@ namespace NPS.Helpers
 
         public void Save()
         {
-            using var fileStream = File.Create(Path);
-            var formatter = new BinaryFormatter();
-            formatter.Serialize(fileStream, this);
+            var json = JsonConvert.SerializeObject(this, Formatting.None);
+            File.WriteAllText(Path, json);
         }
 
-        public NPCache(System.DateTime creationDate)
+        public NPCache(DateTime creationDate)
         {
             UpdateDate = creationDate;
         }
