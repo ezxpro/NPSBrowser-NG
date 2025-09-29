@@ -44,7 +44,7 @@ namespace NPS.Helpers
 
         private static NPCache _instance;
 
-        public System.DateTime UpdateDate;
+        public DateTime UpdateDate { get; private set; }
         public List<Item> localDatabase = new List<Item>();
         public List<Renascene> renasceneCache = new List<Renascene>();
 
