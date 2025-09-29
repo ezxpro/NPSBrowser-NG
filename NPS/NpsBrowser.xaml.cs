@@ -18,11 +18,13 @@ using Avalonia.Markup.Xaml;
 using Avalonia.Media;
 using Avalonia.Threading;
 using Avalonia.VisualTree;
-using Newtonsoft.Json;
+//using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NPS.Helpers;
 using NPS.Helpers.CustomComponents;
 using ReactiveUI;
+using System.Text.Json;
+
 
 namespace NPS
 {
@@ -324,7 +326,16 @@ namespace NPS
                 client.DefaultRequestHeaders.Add("user-agent", "MyPersonalApp");
                 var content = await client.GetStringAsync("https://nopaystation.com/vita/npsReleases/version.json");
 
-                releases = JsonConvert.DeserializeObject<Release[]>(content);
+                // 2. Change this line of code
+                // BEFORE (Newtonsoft.Json)
+                // releases = JsonConvert.DeserializeObject<Release[]>(content);
+        
+                // AFTER (System.Text.Json)
+                // Note: We add options to make property name matching case-insensitive,
+                // which is a common requirement when dealing with web APIs.
+                var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
+                releases = JsonSerializer.Deserialize<Release[]>(content, options);
+
 
                 var newVer = releases[0].version;
                 if (version != newVer)
