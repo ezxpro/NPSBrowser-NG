@@ -138,9 +138,9 @@ namespace NPS
             //themesDbs.Clear();
             updatesDbs.Clear();
 
-            if (NPCache.I.IsCacheValid)
+            if (NPCache.Instance.IsCacheValid)
             {
-                databaseAll = NPCache.I.localDatabase;
+                databaseAll = NPCache.Instance.localDatabase;
 
                 FinalizeDBLoad();
             }
@@ -161,8 +161,8 @@ namespace NPS
 
             FinalizeDBLoad();
 
-            NPCache.I.localDatabase = databaseAll;
-            NPCache.I.Save(DateTime.Now);
+            NPCache.Instance.localDatabase = databaseAll;
+            NPCache.Instance.Save(DateTime.Now);
             sync.Close();
         }
 
@@ -930,7 +930,7 @@ namespace NPS
 
                 Helpers.Renascene myRena = null;
 
-                foreach (var ren in NPCache.I.renasceneCache)
+                foreach (var ren in NPCache.Instance.renasceneCache)
                 {
                     if (itm.Equals(ren.itm)) myRena = ren;
                 }
@@ -941,9 +941,9 @@ namespace NPS
 
                     if (myRena.imgUrl != null)
                     {
-                        if (!NPCache.I.renasceneCache.Contains(myRena))
+                        if (!NPCache.Instance.renasceneCache.Contains(myRena))
                         {
-                            NPCache.I.renasceneCache.Add(myRena);
+                            NPCache.Instance.renasceneCache.Add(myRena);
                         }
 
                         Invoke(new Action(() =>

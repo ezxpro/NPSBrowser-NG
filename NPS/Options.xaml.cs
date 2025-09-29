@@ -78,7 +78,7 @@ namespace NPS
                 tb_proxyServer.Text = Settings.Instance.Proxy.Address.Host;
             }
 
-            lblCacheDate.Text = "Cache date: " + NPCache.I.UpdateDate.ToString(CultureInfo.CurrentCulture);
+            lblCacheDate.Text = "Cache date: " + NPCache.Instance.UpdateDate.ToString(CultureInfo.CurrentCulture);
         }
 
         private async void button1_Click(object sender, EventArgs e)
@@ -211,7 +211,7 @@ namespace NPS
         {
             await _mainForm.Sync();
 
-            lblCacheDate.Text = "Cache date: " + NPCache.I.UpdateDate.ToString(CultureInfo.CurrentCulture);
+            lblCacheDate.Text = "Cache date: " + NPCache.Instance.UpdateDate.ToString(CultureInfo.CurrentCulture);
         }
 
         private void textBox2_KeyPress()

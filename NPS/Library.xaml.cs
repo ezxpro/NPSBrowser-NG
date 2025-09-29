@@ -96,7 +96,7 @@ namespace NPS
 
                     items.Add(library);
 
-                    foreach (var r in NPCache.I.renasceneCache)
+                    foreach (var r in NPCache.Instance.renasceneCache)
                     {
                         if (!itm.Equals(r.itm))
                         {
@@ -144,7 +144,7 @@ namespace NPS
                         continue;
                     }
 
-                    foreach (var r in NPCache.I.renasceneCache)
+                    foreach (var r in NPCache.Instance.renasceneCache)
                     {
                         if (itm.Equals(r.itm))
                         {
@@ -194,7 +194,7 @@ namespace NPS
 
             //            listView1.Items.Add(lvi);
 
-            //            foreach (var r in NPCache.I.renasceneCache)
+            //            foreach (var r in NPCache.Instance.renasceneCache)
             //                if (itm == r.itm)
             //                {
             //                    imagesToLoad.Add(r.imgUrl);

@@ -11,16 +11,16 @@ namespace NPS.Helpers
     {
         private const string Path = "nps.cache";
 
-        public static NPCache I
+        public static NPCache Instance
         {
             get
             {
-                if (_i == null)
+                if (_instance == null)
                 {
                     Load();
                 }
 
-                return _i;
+                return _instance;
             }
         }
 
@@ -42,7 +42,7 @@ namespace NPS.Helpers
             }
         }
 
-        private static NPCache _i;
+        private static NPCache _instance;
 
         public System.DateTime UpdateDate;
         public List<Item> localDatabase = new List<Item>();
@@ -56,8 +56,8 @@ namespace NPS.Helpers
                 {
                     using var stream = File.OpenRead(Path);
                     var formatter = new BinaryFormatter();
-                    _i = (NPCache)formatter.Deserialize(stream);
-                    _i.renasceneCache ??= new List<Renascene>();
+                    _instance = (NPCache)formatter.Deserialize(stream);
+                    _instance.renasceneCache ??= new List<Renascene>();
                     return;
                 }
                 catch (SerializationException)
@@ -66,7 +66,7 @@ namespace NPS.Helpers
                 }
             }
 
-            _i = new NPCache(System.DateTime.MinValue);
+            _instance = new NPCache(System.DateTime.MinValue);
         }
 
         public void InvalidateCache()
