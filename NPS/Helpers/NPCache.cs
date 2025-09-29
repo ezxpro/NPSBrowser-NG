@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
@@ -25,7 +26,21 @@ namespace NPS.Helpers
 
         private bool _cacheInvalid;
 
-        public bool IsCacheIsInvalid => _cacheInvalid || UpdateDate > System.DateTime.Now.AddDays(-4);
+        public bool IsCacheValid
+        {
+            get
+            {
+                if (_cacheInvalid)
+                {
+                    return false;
+                }
+
+                TimeSpan cacheAge = System.DateTime.Now - UpdateDate;
+                bool isValid = cacheAge < TimeSpan.FromDays(4); // Valid if not older than 4 days
+                
+                return isValid;
+            }
+        }
 
         private static NPCache _i;
 

@@ -138,7 +138,7 @@ namespace NPS
             //themesDbs.Clear();
             updatesDbs.Clear();
 
-            if (NPCache.I.IsCacheIsInvalid)
+            if (NPCache.I.IsCacheValid)
             {
                 databaseAll = NPCache.I.localDatabase;
 
