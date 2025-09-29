@@ -32,9 +32,15 @@ namespace NPS.Helpers
         {
             get
             {
-                if (_cacheInvalid) return false;
-                TimeSpan cacheAge = DateTime.Now - UpdateDate;
-                return cacheAge < TimeSpan.FromDays(4);
+                if (_cacheInvalid)
+                {
+                    return false;
+                }
+
+                TimeSpan cacheAge = System.DateTime.Now - UpdateDate;
+                bool isValid = cacheAge < TimeSpan.FromDays(4); // Valid if not older than 4 days
+                
+                return isValid;
             }
         }
 
