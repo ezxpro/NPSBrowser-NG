@@ -140,7 +140,7 @@ namespace NPS
 
             if (NPCache.Instance.IsCacheValid)
             {
-                databaseAll = NPCache.Instance.localDatabase;
+                databaseAll = NPCache.Instance.LocalDatabase;
 
                 FinalizeDBLoad();
             }
@@ -161,7 +161,7 @@ namespace NPS
 
             FinalizeDBLoad();
 
-            NPCache.Instance.localDatabase = databaseAll;
+            NPCache.Instance.LocalDatabase = databaseAll;
             NPCache.Instance.Save(DateTime.Now);
             sync.Close();
         }

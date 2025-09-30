@@ -8,7 +8,7 @@ public class Settings
 {
     public const string HmacKey = "E5E278AA1EE34082A088279C83F9BBC806821C52F2AB5D2B4ABD995450355114";
 
-    private const string CONFIG_PATH = "npsSettings.dat";
+    private const string CONFIG_PATH = "npsSettings.json";
     private static readonly Lazy<Settings> _instance = new Lazy<Settings>(Load);
 
     // Settings

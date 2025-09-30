@@ -8,7 +8,7 @@ namespace NPS.Helpers
     [ProtoContract]
     public class NPCache
     {
-        private const string Path = "nps.cache";
+        private const string Path = "npsCache.bin";
         private static NPCache _instance;
         private bool _cacheInvalid;
 
@@ -26,10 +26,11 @@ namespace NPS.Helpers
 
         [ProtoMember(1)]
         public DateTime UpdateDate { get; set; }
-        [ProtoMember(2)]
-        public List<Item> localDatabase = new List<Item>();
-        [ProtoMember(3)]
-        public List<Renascene> renasceneCache = new List<Renascene>();
+
+        [field: ProtoMember(2)] 
+        public List<Item> LocalDatabase { get; set; } = new List<Item>();
+
+        [field: ProtoMember(3)] public List<Renascene> RenasceneCache { get; set; } = new List<Renascene>();
 
         public bool IsCacheValid
         {
@@ -57,8 +58,8 @@ namespace NPS.Helpers
                     {
                         _instance = Serializer.Deserialize<NPCache>(file);
                     }
-                    _instance.renasceneCache ??= new List<Renascene>();
-                    _instance.localDatabase ??= new List<Item>();
+                    _instance.RenasceneCache ??= new List<Renascene>();
+                    _instance.LocalDatabase ??= new List<Item>();
                     return;
                 }
                 catch (ProtoException)

@@ -96,7 +96,7 @@ namespace NPS
 
                     items.Add(library);
 
-                    foreach (var r in NPCache.Instance.renasceneCache)
+                    foreach (var r in NPCache.Instance.RenasceneCache)
                     {
                         if (!itm.Equals(r.itm))
                         {
@@ -144,7 +144,7 @@ namespace NPS
                         continue;
                     }
 
-                    foreach (var r in NPCache.Instance.renasceneCache)
+                    foreach (var r in NPCache.Instance.RenasceneCache)
                     {
                         if (itm.Equals(r.itm))
                         {
