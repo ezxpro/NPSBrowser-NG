@@ -1300,6 +1300,51 @@ namespace NPS
             toggleDownloadedToolStripMenuItem = this.FindControl<MenuItem>("toggleDownloadedToolStripMenuItem");
             toolStripMenuItem1 = this.FindControl<MenuItem>("toolStripMenuItem1");
 
+            this.WhenAnyValue(x => x.txtSearch.Text)
+    .Subscribe(_ => txtSearch_TextChanged());
+
+            this.WhenAnyValue(x => x.rbnGames.IsChecked)
+                .Subscribe(_ => rbnGames_CheckedChanged());
+
+            this.WhenAnyValue(x => x.rbnAvatars.IsChecked)
+                .Subscribe(_ => rbnAvatars_CheckedChanged());
+
+            this.WhenAnyValue(x => x.rbnThemes.IsChecked)
+                .Subscribe(_ => rbnThemes_CheckedChanged());
+
+            this.WhenAnyValue(x => x.rbnDLC.IsChecked)
+                .Subscribe(_ => rbnDLC_CheckedChanged());
+
+            this.WhenAnyValue(x => x.rbnUpdates.IsChecked)
+                .Subscribe(_ => rbnUpdates_CheckedChanged());
+
+            this.WhenAnyValue(x => x.rbnDownloaded.IsChecked)
+                .Subscribe(_ => rbnDownloaded_CheckedChanged());
+
+            this.WhenAnyValue(x => x.rbnAll.IsChecked)
+                .Subscribe(_ => rbnAll_CheckedChanged());
+
+            this.WhenAnyValue(x => x.rbnUndownloaded.IsChecked)
+                .Subscribe(_ => rbnUndownloaded_CheckedChanged());
+
+            btnDownload.Command = ReactiveCommand.Create(btnDownload_Click);
+
+            btnResume.Command = ReactiveCommand.Create(resumeToolStripMenuItem_Click);
+            btnPause.Command = ReactiveCommand.Create(pauseToolStripMenuItem_Click);
+            btnCancel.Command = ReactiveCommand.Create(cancelToolStripMenuItem_Click);
+            btnClear.Command = ReactiveCommand.Create(clearCompletedToolStripMenuItem_Click);
+            btnOpenFolder.Command = ReactiveCommand.Create(button5_Click);
+            btnResumeAll.Command = ReactiveCommand.Create(ResumeAllBtnClick);
+            btnPauseAll.Command = ReactiveCommand.Create(PauseAllBtnClick);
+
+            downloadAndUnpackToolStripMenuItem.Command = ReactiveCommand.Create(btnDownload_Click);
+            showTitleDlcToolStripMenuItem.Command = ReactiveCommand.Create(showTitleDlcToolStripMenuItem_Click);
+            downloadAllDlcsToolStripMenuItem.Command = ReactiveCommand.Create(downloadAllDlcsToolStripMenuItem_Click);
+            downloadAllToolStripMenuItem.Command = ReactiveCommand.Create(downloadAllToolStripMenuItem_Click);
+            checkForPatchesToolStripMenuItem.Command = ReactiveCommand.Create(checkForPatchesToolStripMenuItem_Click);
+            toggleDownloadedToolStripMenuItem.Command = ReactiveCommand.Create(toggleDownloadedToolStripMenuItem_Click);
+            toolStripMenuItem1.Command = ReactiveCommand.Create(toolStripMenuItem1_Click);
+
             OptionsMenuItem.Command = ReactiveCommand.Create(optionsToolStripMenuItem_Click);
             SyncMenuItem.Command = ReactiveCommand.Create(Sync);
             ChangelogMenuItem.Command = ReactiveCommand.Create(ts_changeLog_Click);
