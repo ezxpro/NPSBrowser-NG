@@ -33,7 +33,7 @@ namespace NPS
 
         public static NpsBrowser MainWindow { get; private set; }
 
-        public const string version = "0.94"; //Dyrqrap
+        public const string version = "0.95"; //Dyrqrap
         private List<Item> currentDatabase = new List<Item>();
 
         private List<Item> databaseAll = new List<Item>();
@@ -98,7 +98,7 @@ namespace NPS
 
         public async void Start()
         {
-            NewVersionCheck();
+            //NewVersionCheck();
 
             _timer1.Start();
 
@@ -307,7 +307,7 @@ namespace NPS
             }
         }
 
-        private async void NewVersionCheck()
+        /*private async void NewVersionCheck()
         {
             if (version.Contains("beta"))
             {
@@ -339,7 +339,7 @@ namespace NPS
             {
                 Console.WriteLine("Exception while checking for new version:\n{0}", e);
             }
-        }
+        }*/
 
 
         private void RefreshList(List<Item> items)
@@ -1196,7 +1196,7 @@ namespace NPS
         private DataGrid lstDownloadStatus;
         private DataGrid lstTitles;
 
-        private MenuItem DownloadUpdateMenuItem;
+        //private MenuItem DownloadUpdateMenuItem;
         private MenuItem OptionsMenuItem;
         private MenuItem SyncMenuItem;
         private MenuItem ChangelogMenuItem;
@@ -1253,7 +1253,7 @@ namespace NPS
             lstDownloadStatus = this.Find<DataGrid>("DownloadStatusList");
             lstTitles = this.Find<DataGrid>("lstTitles");
 
-            DownloadUpdateMenuItem = this.Find<MenuItem>("DownloadUpdateMenuItem");
+            //DownloadUpdateMenuItem = this.Find<MenuItem>("DownloadUpdateMenuItem");
             OptionsMenuItem = this.Find<MenuItem>("OptionsMenuItem");
             SyncMenuItem = this.Find<MenuItem>("SyncMenuItem");
             ChangelogMenuItem = this.FindControl<MenuItem>("ChangelogMenuItem");
