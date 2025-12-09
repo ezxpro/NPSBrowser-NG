@@ -27,24 +27,21 @@ namespace NPS.Helpers
         [ProtoMember(1)]
         public DateTime UpdateDate { get; set; }
 
-        [field: ProtoMember(2)] 
+        [ProtoMember(2)]
         public List<Item> LocalDatabase { get; set; } = new List<Item>();
 
-        [field: ProtoMember(3)] public List<Renascene> RenasceneCache { get; set; } = new List<Renascene>();
+        [ProtoMember(3)]
+        public List<Renascene> RenasceneCache { get; set; } = new List<Renascene>();
 
         public bool IsCacheValid
         {
             get
             {
                 if (_cacheInvalid)
-                {
                     return false;
-                }
 
-                TimeSpan cacheAge = System.DateTime.Now - UpdateDate;
-                bool isValid = cacheAge < TimeSpan.FromDays(4); // Valid if not older than 4 days
-                
-                return isValid;
+                TimeSpan cacheAge = DateTime.Now - UpdateDate;
+                return cacheAge < TimeSpan.FromDays(4);
             }
         }
 
@@ -58,13 +55,15 @@ namespace NPS.Helpers
                     {
                         _instance = Serializer.Deserialize<NPCache>(file);
                     }
-                    _instance.RenasceneCache ??= new List<Renascene>();
+
+                    // Ensure lists are never null
                     _instance.LocalDatabase ??= new List<Item>();
+                    _instance.RenasceneCache ??= new List<Renascene>();
                     return;
                 }
                 catch (ProtoException)
                 {
-                    // bad cache → drop it
+                    // corrupted cache → rebuild
                 }
             }
 
@@ -90,7 +89,16 @@ namespace NPS.Helpers
             }
         }
 
-        public NPCache(DateTime creationDate)
+        // REQUIRED BY PROTOBUF
+        private NPCache()
+        {
+            UpdateDate = DateTime.MinValue;
+            LocalDatabase = new List<Item>();
+            RenasceneCache = new List<Renascene>();
+        }
+
+        // Your original constructor
+        public NPCache(DateTime creationDate) : this()
         {
             UpdateDate = creationDate;
         }
