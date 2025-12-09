@@ -43,7 +43,14 @@ namespace NPS
 
         private void Refresh()
         {
-            listView1.Items = null;
+            if (string.IsNullOrWhiteSpace(Settings.Instance.DownloadDir) ||
+                !Directory.Exists(Settings.Instance.DownloadDir))
+            {
+                label1.Text = "Download path not set. Go to File → Options → Download and unpack dir ";
+                listView1.Items = null;
+                return; 
+                listView1.Items = null;
+            }
 
             label1.Text = Settings.Instance.DownloadDir;
 
