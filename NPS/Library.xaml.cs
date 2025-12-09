@@ -46,11 +46,14 @@ namespace NPS
             if (string.IsNullOrWhiteSpace(Settings.Instance.DownloadDir) ||
                 !Directory.Exists(Settings.Instance.DownloadDir))
             {
-                label1.Text = "Download path not set. Go to File → Options → Download and unpack dir ";
+                // Optional: Update label to show it's missing
+                label1.Text = "Download path not set. Got to";
                 listView1.Items = null;
-                return; 
-                listView1.Items = null;
+                return; // Stop here so we don't crash below
             }
+
+            listView1.Items = null;
+            
 
             label1.Text = Settings.Instance.DownloadDir;
 
