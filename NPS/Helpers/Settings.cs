@@ -12,7 +12,8 @@ public class Settings
     private static readonly Lazy<Settings> _instance = new Lazy<Settings>(Load);
 
     // Settings
-    public string PkgPath { get; set; }
+    public string DownloadDir { get; set; } = @".\downloads\";
+    public string PkgPath { get; set; } = @".\pkg2zip.exe";
     public string PkgParams { get; set; } = "-x {pkgFile} \"{zRifKey}\"";
     public bool DeleteAfterUnpack { get; set; } = true;
     public int SimultaneousDl { get; set; } = 2;
@@ -58,24 +59,36 @@ public class Settings
 
     public static Settings Instance => _instance.Value;
 
-    public string DownloadDir { get; set; }
-
     public static Settings Load()
     {
+        Settings settings;
+        
         if (File.Exists(CONFIG_PATH))
         {
+
             try
             {
                 var json = File.ReadAllText(CONFIG_PATH);
-                return JsonSerializer.Deserialize<Settings>(json) ?? new Settings();
+                settings = JsonSerializer.Deserialize<Settings>(json) ?? new Settings();
             }
             catch (JsonException)
             {
                 // fall back to defaults if corrupted
+                settings = new Settings();
             }
         }
+        else
+        {
+            settings = new Settings();
+        }
 
-        return new Settings();
+        // Only create "./download/" folder if DownloadDir is not null and does not exist
+        if (!string.IsNullOrWhiteSpace(settings.DownloadDir) && !Directory.Exists(settings.DownloadDir))
+        {
+            Directory.CreateDirectory(settings.DownloadDir);
+        }
+
+        return settings;
     }
 
     public void Save()
